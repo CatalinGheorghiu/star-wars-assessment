@@ -6,6 +6,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import CharacterPage from "@/pages/CharacterPage.tsx";
 import HomePage from "@/pages/HomePage.tsx";
 
 const queryClient = new QueryClient();
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />
+  },
+  {
+    path: "/character/:id/:name",
+    element: <CharacterPage />
   }
 ]);
 
