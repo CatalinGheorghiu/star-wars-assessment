@@ -1,29 +1,17 @@
 import { Link } from "react-router-dom";
 
-import { FragmentType, graphql, useFragment } from "@/gql";
-import { formatStringForUrl } from "@/utils/helpers.ts";
+import { Person } from "@/services/api/characters/types";
 
-export const PersonFragment = graphql(`
-  fragment PersonItem on Person {
-    homeworld {
-      name
-      id
-    }
-    name
-    id
-  }
-`);
+type CharacterCardProps = {
+  person: Person;
+};
 
-const CharacterCard = (props: {
-  person: FragmentType<typeof PersonFragment>;
-}) => {
-  const person = useFragment(PersonFragment, props.person);
-
+const CharacterCard = ({ person }: CharacterCardProps) => {
   return (
     <li className="h-52 w-full cursor-pointer flex-col gap-y-4 rounded-md border border-white">
       {person?.name && (
         <Link
-          to={`/character/${person.id}/${formatStringForUrl(person.name)}`}
+          to={`/character/${person.id}}`}
           className="flex h-full flex-col p-4"
         >
           <p className="flex items-center gap-x-2">
