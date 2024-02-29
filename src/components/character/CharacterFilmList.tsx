@@ -3,25 +3,27 @@ import { sortFilmsByReleaseDate } from "@/utils/helpers.ts";
 
 type FilmListProps = { characterDetails: PersonDetails };
 
-const FilmList = ({ characterDetails }: FilmListProps) => {
-  if (!characterDetails) return;
-
+const CharacterFilmList = ({ characterDetails }: FilmListProps) => {
   const descendentReleaseDateFilms = sortFilmsByReleaseDate(
     characterDetails.filmConnection.films
   );
 
   return (
     <div>
-      <h2 className="text-2xl">
+      <h2 className="text-xl md:text-2xl">
         List of titles in which{" "}
         <span className="text-amber-500">{characterDetails.name}</span> has
         appeared:
       </h2>
-      <ul className="py-6">
+
+      <ul className="grid py-6 sm:grid-cols-2">
         {descendentReleaseDateFilms.map((film) => (
-          <li key={film?.id} className="flex">
-            <p className="pr-2">{film?.releaseDate}:</p>
-            <p>{film?.title}</p>
+          <li
+            key={film?.id}
+            className="flex w-full flex-col gap-y-2 border-y border-slate-500 py-4 text-center"
+          >
+            <p className="text-amber-500">{film?.title}</p>
+            <p className="pr-2">{film?.releaseDate}</p>
           </li>
         ))}
       </ul>
@@ -29,4 +31,4 @@ const FilmList = ({ characterDetails }: FilmListProps) => {
   );
 };
 
-export default FilmList;
+export default CharacterFilmList;

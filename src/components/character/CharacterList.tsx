@@ -4,8 +4,8 @@ import CharacterCard from "@/components/character/CharacterCard.tsx";
 import { AllPeople, Person } from "@/services/api/characters/types";
 
 type CharacterListProps = {
-  filteredData: Person[] | null | undefined;
-  paginatedCharacters: InfiniteData<AllPeople, unknown> | undefined;
+  filteredData: Person[];
+  paginatedCharacters: InfiniteData<AllPeople, unknown>;
 };
 
 const CharacterList = ({
@@ -13,12 +13,12 @@ const CharacterList = ({
   paginatedCharacters
 }: CharacterListProps) => {
   const characters =
-    filteredData ??
-    paginatedCharacters?.pages.flatMap((page) => page.allPeople.people) ??
-    [];
+    filteredData?.length > 0
+      ? filteredData
+      : paginatedCharacters?.pages.flatMap((page) => page.allPeople.people);
 
   return (
-    <ul className="mt-4 grid grid-cols-3 items-center justify-center gap-8">
+    <ul className="mt-4 grid grid-cols-1 justify-center justify-items-center gap-8 sm:grid-cols-2 md:grid-cols-3 md:gap-y-14 lg:grid-cols-3">
       {characters.map((person) => (
         <CharacterCard key={person?.id} person={person} />
       ))}

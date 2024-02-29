@@ -4,7 +4,4 @@ import { allCharacters } from "@/services/api/characters/queries/allCharacters.t
 import { AllPeople } from "@/services/api/characters/types";
 
 export const fetchAllCharacters = () =>
-  request<AllPeople>(
-    "https://swapi-graphql.netlify.app/.netlify/functions/index",
-    allCharacters
-  );
+  request<AllPeople>(import.meta.env.VITE_BASE_URL, allCharacters);

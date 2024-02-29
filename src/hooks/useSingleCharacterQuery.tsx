@@ -5,7 +5,6 @@ import { fetchCharacter } from "@/services/api/characters/requests/getCharacter.
 export const useSingleCharacterQuery = (id: string) => {
   return useQuery({
     queryKey: ["character", id],
-    queryFn: async () => fetchCharacter(id),
-    staleTime: 1000 * 60 * 6
+    queryFn: async () => fetchCharacter(id)
   });
 };

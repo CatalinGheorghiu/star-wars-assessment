@@ -5,7 +5,7 @@ type SearchProps = {
 const Search = ({ className }: SearchProps) => {
   return (
     <svg
-      className={`h-4 w-4 text-gray-500 dark:text-gray-400 ${className}`}
+      className={`h-4 w-4 text-white ${className}`}
       aria-hidden="true"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

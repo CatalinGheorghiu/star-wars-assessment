@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 
 import CharacterDetails from "@/components/character/CharacterDetails.tsx";
-import FilmList from "@/components/character/FilmList.tsx";
+import CharacterFilmList from "@/components/character/CharacterFilmList.tsx";
 import Error from "@/components/Error.tsx";
 import Layout from "@/components/layout/Layout.tsx";
 import Loading from "@/components/Loading.tsx";
@@ -10,13 +10,11 @@ import { useSingleCharacterQuery } from "@/hooks/useSingleCharacterQuery.tsx";
 const CharacterPage = () => {
   const { id } = useParams<{ id: string }>();
 
-  if (!id) return;
-
   const {
     data: characterDetails,
     isLoading,
     isError
-  } = useSingleCharacterQuery(id);
+  } = useSingleCharacterQuery(id ?? "");
 
   if (isLoading) {
     return <Loading />;
@@ -30,14 +28,14 @@ const CharacterPage = () => {
     <Layout>
       <Link
         to="/"
-        className="flex max-w-fit items-center rounded-3xl border px-10 py-2 transition-all delay-300 ease-out hover:border-amber-500 hover:bg-white hover:text-black"
+        className="mx-5 flex max-w-fit items-center rounded-3xl transition-all delay-300 ease-in-out hover:border-amber-500 hover:bg-white hover:text-black"
       >
         <span className="mr-2 text-3xl">&#8592;</span> Back
       </Link>
 
-      <section className="flex flex-col py-10">
+      <section className="mx-5 flex flex-col gap-y-4 py-10 md:gap-y-10">
         <CharacterDetails characterDetails={characterDetails.person} />
-        <FilmList characterDetails={characterDetails.person} />
+        <CharacterFilmList characterDetails={characterDetails.person} />
       </section>
     </Layout>
   );

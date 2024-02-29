@@ -9,7 +9,13 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CharacterPage from "@/pages/CharacterPage.tsx";
 import HomePage from "@/pages/HomePage.tsx";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 6
+    }
+  }
+});
 const router = createBrowserRouter([
   {
     path: "/",

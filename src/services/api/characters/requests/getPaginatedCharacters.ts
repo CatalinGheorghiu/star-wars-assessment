@@ -4,11 +4,7 @@ import { paginatedCharacters } from "@/services/api/characters/queries/paginated
 import { AllPeople } from "@/services/api/characters/types";
 
 export const fetchCharacters = (pageParam: string) =>
-  request<AllPeople>(
-    "https://swapi-graphql.netlify.app/.netlify/functions/index",
-    paginatedCharacters,
-    {
-      first: 10,
-      after: pageParam
-    }
-  );
+  request<AllPeople>(import.meta.env.VITE_BASE_URL, paginatedCharacters, {
+    first: 10,
+    after: pageParam
+  });

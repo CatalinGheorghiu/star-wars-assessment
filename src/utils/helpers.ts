@@ -1,12 +1,4 @@
-import { Film } from "@/services/api/characters/types";
-
-/**
- * Format a string for URL use.
- * Replaces spaces with hyphens and converts to lowercase.
- */
-export const formatStringForUrl = (str: string) => {
-  return str?.toLowerCase().split(" ").join("-");
-};
+import { Film, Person } from "@/services/api/characters/types";
 
 /**
  * Sort films by release date in descending order.
@@ -20,3 +12,24 @@ export const sortFilmsByReleaseDate = (films: Film[]) =>
       new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
     );
   });
+
+/**
+ * Filter character data based on the input search string.
+ */
+export const filterCharacterData = (
+  inputSearch: string,
+  characters: Person[]
+) => {
+  // If inputSearch is empty or characters is undefined, return an empty array
+  if (inputSearch.length === 0 || !characters) {
+    return [];
+  }
+
+  // Filter the characters based on the inputSearch
+  return characters.filter(
+    (person) =>
+      person.name.toLowerCase().includes(inputSearch.toLowerCase()) ||
+      (person.homeworld &&
+        person.homeworld.name.toLowerCase().includes(inputSearch.toLowerCase()))
+  );
+};

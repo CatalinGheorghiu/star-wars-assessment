@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 import CharacterList from "@/components/character/CharacterList.tsx";
 import Error from "@/components/Error.tsx";
+import Spinner from "@/components/icons/Spinner.tsx";
 import Layout from "@/components/layout/Layout.tsx";
 import Loading from "@/components/Loading.tsx";
 import SearchInput from "@/components/SearchInput.tsx";
 import { useAllCharactersQuery } from "@/hooks/useAllCharactersQuery.tsx";
 import { usePaginatedCharactersQuery } from "@/hooks/usePaginatedCharactersQuery.tsx";
+import { filterCharacterData } from "@/utils/helpers.ts";
 
 const HomePage = () => {
   const [inputSearch, setInputSearch] = useState("");
@@ -15,58 +17,64 @@ const HomePage = () => {
 
   const {
     data: paginatedCharacters,
-    isLoading,
+    isLoading: paginatedLoading,
     fetchNextPage,
     isFetchingNextPage,
-    isError
+    isError: paginatedError
   } = usePaginatedCharactersQuery();
 
-  const { data: allCharacters } = useAllCharactersQuery(
-    inputSearch.length > 0 && inputSearch !== " "
-  );
-
-  const filteredData =
-    inputSearch.length > 0
-      ? allCharacters?.allPeople.people.filter(
-          (person) =>
-            person.name.toLowerCase().includes(inputSearch.toLowerCase()) ||
-            person.homeworld.name
-              .toLowerCase()
-              .includes(inputSearch.toLowerCase())
-        )
-      : null;
+  // Get all the characters when the input is not empty
+  const { data: allCharacters, isError: allCharactersError } =
+    useAllCharactersQuery(inputSearch.length > 0 && inputSearch !== " ");
 
   useEffect(() => {
+    // Check if the DOM element bounded to the ref is in the view port
     if (inView) {
       fetchNextPage();
     }
   }, [fetchNextPage, inView]);
 
-  if (isLoading) {
+  const filteredData = useMemo(() => {
+    return filterCharacterData(
+      inputSearch,
+      allCharacters?.allPeople.people || []
+    );
+  }, [inputSearch, allCharacters]);
+
+  if (paginatedLoading) {
     return <Loading />;
   }
 
-  if (isError) {
+  if (paginatedError || allCharactersError) {
     return <Error />;
   }
 
   return (
     <Layout>
-      <section className="flex flex-col p-20">
-        <h1 className="text-3xl">Characters</h1>
+      <section className="mx-5 my-8 flex flex-col">
+        <h1 className="text-center text-2xl md:text-3xl">
+          All of your Star Wars favorite characters
+        </h1>
 
         <SearchInput
           value={inputSearch}
           onChange={(event) => setInputSearch(event.target.value)}
         />
 
-        {!isLoading && !isError && (
-          <CharacterList
-            filteredData={filteredData}
-            paginatedCharacters={paginatedCharacters}
-          />
-        )}
-        <div ref={ref}>{isFetchingNextPage && "Loading..."}</div>
+        <CharacterList
+          filteredData={filteredData}
+          paginatedCharacters={
+            paginatedCharacters || { pages: [], pageParams: [] }
+          }
+        />
+
+        <div ref={ref}>
+          {isFetchingNextPage && (
+            <div className="my-10 flex items-center justify-center">
+              <Spinner />
+            </div>
+          )}
+        </div>
       </section>
     </Layout>
   );
