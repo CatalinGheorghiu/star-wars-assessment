@@ -40,3 +40,4 @@ yarn dev
 5. Open your browser and visit http://localhost:5173/ to view the application
 
 ### Demo
+https://star-wars-challenge-graphql.vercel.app/
